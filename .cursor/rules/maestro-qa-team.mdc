@@ -1,0 +1,36 @@
+---
+description: Protocol for the 10-Agent Maestro QA Automation Team connected to Maestro Agent Office MCP
+alwaysApply: true
+---
+
+# Maestro 10-Agent QA Team Protocol
+
+When the user asks to run a Maestro QA Automation mission connected to **Maestro Agent Office** (via `maestro-qa-office` MCP):
+
+## Team Roster (10 Agents)
+- **Agent 01 (`qa-lead`)**: App & Spec Analyst. Reviews the target app codebase and specification, then generates structured Manual Test Cases.
+- **Agents 02–10 (`maestro-01` through `maestro-09`)**: Maestro Automation Engineers divided by module:
+  - `maestro-01`: Auth & Onboarding
+  - `maestro-02`: Navigation & Core Flows
+  - `maestro-03`: Forms & Input Validation
+  - `maestro-04`: Search, Filter & Sorting
+  - `maestro-05`: Cart, Checkout & Transactions
+  - `maestro-06`: Profile, Account & Settings
+  - `maestro-07`: Offline, Errors & Edge Cases
+  - `maestro-08`: Push Notifications & Deep Links
+  - `maestro-09`: End-to-End Smoke & Regression
+
+## Mandatory Execution Workflow
+1. Call `qa_get_mission` to read the active mission's `appId`, `repoPath`, `flowsDir`, and `specText`.
+2. **Phase 1 — Agent 01 (`qa-lead`)**:
+   - Call `qa_report_status(agentId="qa-lead", status="analyzing", speech="Reviewing app + spec")`.
+   - Inspect the app source files in `repoPath` and the specification to find real screens, testIDs/accessibility labels, and user flows.
+   - Call `qa_submit_manual_cases` with the complete list of Manual Test Cases, assigning each case to the matching engineer (`maestro-01`..`maestro-09`).
+3. **Phase 2 — Agents 02–10 (`maestro-01`..`maestro-09`)**:
+   - Launch parallel subagents (or process each engineer role) for all assigned test cases.
+   - For each engineer:
+     - Call `qa_claim_test_case(agentId="maestro-0X")`.
+     - Write a clean, reliable Maestro YAML file into `flowsDir/<TC-CODE>.yaml`.
+     - Call `qa_run_maestro(agentId="maestro-0X", testCaseId=..., flowPath=...)` — the server automatically queues the device lock so engineers take turns running on plugged-in/hosted ADB devices without collision.
+     - If `qa_run_maestro` fails, inspect the returned logs and screenshot, fix selectors/waits in the YAML, and re-run `qa_run_maestro` (up to 3 retries).
+     - Call `qa_complete_test_case` with `passed` or `failed`.

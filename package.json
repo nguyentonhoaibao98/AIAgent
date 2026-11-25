@@ -1,0 +1,22 @@
+{
+  "name": "maestro-agent-office",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "shared",
+    "server",
+    "mcp",
+    "web"
+  ],
+  "scripts": {
+    "dev": "concurrently -n SERVER,WEB -c cyan,magenta \"npm run dev -w server\" \"npm run dev -w web\"",
+    "dev:server": "npm run dev -w server",
+    "dev:web": "npm run dev -w web",
+    "build": "npm run build -w shared && npm run build -w server && npm run build -w mcp && npm run build -w web",
+    "typecheck": "npm run typecheck -w shared && npm run typecheck -w server && npm run typecheck -w mcp && npm run typecheck -w web"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "typescript": "^5.8.2"
+  }
+}

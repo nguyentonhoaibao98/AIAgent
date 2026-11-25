@@ -1,0 +1,27 @@
+{
+  "name": "@maestro-office/server",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@maestro-office/shared": "*",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "ws": "^8.18.1"
+  },
+  "optionalDependencies": {
+    "@cursor/sdk": "latest"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.14.0",
+    "@types/ws": "^8.18.1",
+    "tsx": "^4.19.3"
+  }
+}

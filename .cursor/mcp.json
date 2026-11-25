@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "maestro-qa-office": {
+      "command": "node",
+      "args": ["./mcp/dist/index.js"],
+      "env": {
+        "MAESTRO_OFFICE_URL": "http://localhost:4800"
+      }
+    }
+  }
+}
